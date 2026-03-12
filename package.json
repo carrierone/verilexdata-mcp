@@ -1,7 +1,7 @@
 {
   "name": "@verilex/mcp-server",
-  "version": "0.1.0",
-  "description": "MCP server for Verilex Data — query NPI, SEC, PACER, Weather, and OTC datasets from AI agents",
+  "version": "0.2.0",
+  "description": "MCP server for Verilex Data — query NPI, SEC, PACER, Weather, OTC, Trademarks, Patents, and Company Intelligence datasets from AI agents",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -34,9 +34,6 @@
     "sec",
     "edgar",
     "healthcare",
-    "weather",
-    "pacer",
-    "otc",
     "data"
   ],
   "repository": {
