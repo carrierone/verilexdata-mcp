@@ -26,6 +26,18 @@ export interface ApiResponse<T = unknown> {
   ok: boolean;
   status: number;
   data: T;
+  stale?: boolean;
+  lastUpdated?: string;
+  ageSeconds?: number;
+}
+
+/** Build a staleness warning string if the data is stale, or empty string. */
+export function stalenessWarning(res: ApiResponse): string {
+  if (!res.stale) return "";
+  const parts = ["[STALE DATA]"];
+  if (res.lastUpdated) parts.push(`Last updated: ${res.lastUpdated}`);
+  if (res.ageSeconds != null) parts.push(`Age: ${res.ageSeconds}s`);
+  return parts.join(" ") + "\n\n";
 }
 
 /** Make a GET request to the Verilex API and return parsed JSON. */
@@ -49,9 +61,16 @@ export async function apiGet<T = unknown>(
   const res = await fetch(url, { headers });
   const data = (await res.json()) as T;
 
+  const stale = res.headers.get("X-Data-Stale");
+  const lastUpdated = res.headers.get("X-Data-Last-Updated");
+  const ageSeconds = res.headers.get("X-Data-Age-Seconds");
+
   return {
     ok: res.ok,
     status: res.status,
     data,
+    stale: stale === "true",
+    lastUpdated: lastUpdated ?? undefined,
+    ageSeconds: ageSeconds ? Number(ageSeconds) : undefined,
   };
 }

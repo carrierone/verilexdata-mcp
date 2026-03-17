@@ -1,7 +1,7 @@
 {
   "name": "@verilex/mcp-server",
-  "version": "0.2.0",
-  "description": "MCP server for Verilex Data — query NPI, SEC, PACER, Weather, OTC, Trademarks, Patents, and Company Intelligence datasets from AI agents",
+  "version": "0.3.0",
+  "description": "MCP server for Verilex Data — 20 datasets including NPI, SEC, OFAC sanctions, whale tracking, DEX trades, Polymarket signals, economic indicators, and more. Pay-per-query with USDC via x402.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -30,18 +30,27 @@
     "mcp",
     "model-context-protocol",
     "verilex",
+    "x402",
+    "data",
     "npi",
     "sec",
-    "edgar",
-    "healthcare",
-    "data"
+    "sanctions",
+    "ofac",
+    "whale-tracking",
+    "defi",
+    "polymarket",
+    "prediction-markets",
+    "crypto",
+    "government-data"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/carrierone/verilexdata-mcp"
+    "url": "git+https://github.com/carrierone/verilexdata-mcp.git"
   },
   "homepage": "https://verilexdata.com",
   "bugs": {
     "url": "https://github.com/carrierone/verilexdata-mcp/issues"
-  }
+  },
+  "main": "index.js",
+  "author": ""
 }
