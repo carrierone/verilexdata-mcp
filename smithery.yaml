@@ -1,0 +1,26 @@
+# Smithery configuration for Verilex Data MCP Server
+# https://smithery.ai/docs/config
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiUrl:
+        type: string
+        default: "https://api.verilexdata.com"
+        description: "Verilex Data API base URL"
+      paymentToken:
+        type: string
+        default: ""
+        description: "x402 payment token for paid endpoints (optional — free endpoints work without it)"
+    required: []
+  commandFunction: |-
+    (config) => ({
+      command: "node",
+      args: ["dist/index.js"],
+      env: {
+        VERILEX_API_URL: config.apiUrl || "https://api.verilexdata.com",
+        VERILEX_PAYMENT_TOKEN: config.paymentToken || ""
+      }
+    })
