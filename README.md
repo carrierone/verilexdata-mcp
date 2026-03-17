@@ -1,5 +1,11 @@
 # @verilex/mcp-server
 
+[![Smithery](https://smithery.ai/badge/carrierone/verilexdata-mcp)](https://smithery.ai/servers/carrierone/verilexdata-mcp)
+[![Signal402](https://img.shields.io/badge/Signal402-listed-blue)](https://signal402.com)
+[![x402](https://img.shields.io/badge/x402-USDC%20payments-green)](https://verilexdata.com/docs/x402)
+[![Datasets](https://img.shields.io/badge/datasets-20-orange)](https://verilexdata.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 MCP server for [Verilex Data](https://verilexdata.com) — 20 structured datasets accessible from AI agents via the [Model Context Protocol](https://modelcontextprotocol.io/).
 
 ## Install
