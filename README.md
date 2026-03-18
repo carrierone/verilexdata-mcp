@@ -8,6 +8,8 @@
 
 MCP server for [Verilex Data](https://verilexdata.com) — 20 structured datasets accessible from AI agents via the [Model Context Protocol](https://modelcontextprotocol.io/).
 
+[![Verilex Data MCP server](https://glama.ai/mcp/servers/carrierone/verilexdata-mcp/badges/card.svg)](https://glama.ai/mcp/servers/carrierone/verilexdata-mcp)
+
 ## Install
 
 Add to your MCP client config (Claude Desktop, VS Code, Cursor, etc.):
