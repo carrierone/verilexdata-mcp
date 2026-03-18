@@ -1,17 +1,13 @@
 #!/usr/bin/env node
 
 // Verilex Data MCP Server
-// Exposes NPI, SEC, PACER, Weather, OTC, Trademarks, Patents,
-// Company Intelligence, Crypto Intelligence, Sanctions, Whales,
-// Labels, Holders, DEX, Government Contracts, Polymarket,
-// Economic Indicators, and more datasets as MCP tools
-// for use in Claude Desktop, VS Code, Cursor, and other MCP clients.
-//
-// Transport: stdio (spawned by the MCP client as a child process)
-// Data source: Verilex API (HTTP) — configurable via VERILEX_API_URL env var
+// Supports both stdio (spawned by MCP client) and HTTP (containerized / Glama)
+// Set MCP_TRANSPORT=http to use HTTP mode (default port 3000)
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { createServer } from "node:http";
 
 import { registerNpiTools } from "./tools/npi.js";
 import { registerSecTools } from "./tools/sec.js";
@@ -34,33 +30,55 @@ import { registerPmResolutionTools } from "./tools/pm_resolution.js";
 import { registerEconTools } from "./tools/econ.js";
 import { registerPmMicroTools } from "./tools/pm_micro.js";
 
-const server = new McpServer({
-  name: "verilex-data",
-  version: "0.3.0",
-});
+function createMcpServer() {
+  const server = new McpServer({
+    name: "verilex-data",
+    version: "0.3.3",
+  });
 
-// Register all dataset tools
-registerNpiTools(server);
-registerSecTools(server);
-registerPacerTools(server);
-registerWeatherTools(server);
-registerOtcTools(server);
-registerTrademarkTools(server);
-registerPatentTools(server);
-registerCompanyTools(server);
-registerCryptoTools(server);
-registerSanctionsTools(server);
-registerWhaleTools(server);
-registerLabelTools(server);
-registerHolderTools(server);
-registerDexTools(server);
-registerContractTools(server);
-registerPmTools(server);
-registerPmArbTools(server);
-registerPmResolutionTools(server);
-registerEconTools(server);
-registerPmMicroTools(server);
+  registerNpiTools(server);
+  registerSecTools(server);
+  registerPacerTools(server);
+  registerWeatherTools(server);
+  registerOtcTools(server);
+  registerTrademarkTools(server);
+  registerPatentTools(server);
+  registerCompanyTools(server);
+  registerCryptoTools(server);
+  registerSanctionsTools(server);
+  registerWhaleTools(server);
+  registerLabelTools(server);
+  registerHolderTools(server);
+  registerDexTools(server);
+  registerContractTools(server);
+  registerPmTools(server);
+  registerPmArbTools(server);
+  registerPmResolutionTools(server);
+  registerEconTools(server);
+  registerPmMicroTools(server);
 
-// Connect via stdio
-const transport = new StdioServerTransport();
-await server.connect(transport);
+  return server;
+}
+
+const transport = process.env.MCP_TRANSPORT ?? (process.stdin.isTTY ? "http" : "stdio");
+
+if (transport === "http") {
+  const port = parseInt(process.env.PORT ?? "3000", 10);
+
+  const httpTransport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  const server = createMcpServer();
+  await server.connect(httpTransport);
+
+  const httpServer = createServer((req, res) => {
+    httpTransport.handleRequest(req, res);
+  });
+
+  httpServer.listen(port, () => {
+    process.stderr.write(`Verilex MCP server listening on port ${port}
+`);
+  });
+} else {
+  const server = createMcpServer();
+  const stdioTransport = new StdioServerTransport();
+  await server.connect(stdioTransport);
+}
