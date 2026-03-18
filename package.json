@@ -1,6 +1,6 @@
 {
   "name": "@verilex/mcp-server",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "MCP server for Verilex Data \u2014 20 datasets including NPI, SEC, OFAC sanctions, whale tracking, DEX trades, Polymarket signals, economic indicators, and more. Pay-per-query with USDC via x402.",
   "license": "MIT",
   "type": "module",
